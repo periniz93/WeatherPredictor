@@ -1,0 +1,15 @@
+C:\Users\perin\source\repos\Stormhaven Weather Generator\Stormhaven Weather Generator\obj\Debug\net6.0\Stormhaven Weather Generator.csproj.AssemblyReference.cache
+C:\Users\perin\source\repos\Stormhaven Weather Generator\Stormhaven Weather Generator\obj\Debug\net6.0\Stormhaven Weather Generator.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\perin\source\repos\Stormhaven Weather Generator\Stormhaven Weather Generator\obj\Debug\net6.0\Stormhaven Weather Generator.AssemblyInfoInputs.cache
+C:\Users\perin\source\repos\Stormhaven Weather Generator\Stormhaven Weather Generator\obj\Debug\net6.0\Stormhaven Weather Generator.AssemblyInfo.cs
+C:\Users\perin\source\repos\Stormhaven Weather Generator\Stormhaven Weather Generator\obj\Debug\net6.0\Stormhaven Weather Generator.csproj.CoreCompileInputs.cache
+C:\Users\perin\source\repos\Stormhaven Weather Generator\Stormhaven Weather Generator\bin\Debug\net6.0\Stormhaven Weather Generator.exe
+C:\Users\perin\source\repos\Stormhaven Weather Generator\Stormhaven Weather Generator\bin\Debug\net6.0\Stormhaven Weather Generator.deps.json
+C:\Users\perin\source\repos\Stormhaven Weather Generator\Stormhaven Weather Generator\bin\Debug\net6.0\Stormhaven Weather Generator.runtimeconfig.json
+C:\Users\perin\source\repos\Stormhaven Weather Generator\Stormhaven Weather Generator\bin\Debug\net6.0\Stormhaven Weather Generator.dll
+C:\Users\perin\source\repos\Stormhaven Weather Generator\Stormhaven Weather Generator\bin\Debug\net6.0\Stormhaven Weather Generator.pdb
+C:\Users\perin\source\repos\Stormhaven Weather Generator\Stormhaven Weather Generator\obj\Debug\net6.0\Stormhaven Weather Generator.dll
+C:\Users\perin\source\repos\Stormhaven Weather Generator\Stormhaven Weather Generator\obj\Debug\net6.0\refint\Stormhaven Weather Generator.dll
+C:\Users\perin\source\repos\Stormhaven Weather Generator\Stormhaven Weather Generator\obj\Debug\net6.0\Stormhaven Weather Generator.pdb
+C:\Users\perin\source\repos\Stormhaven Weather Generator\Stormhaven Weather Generator\obj\Debug\net6.0\Stormhaven Weather Generator.genruntimeconfig.cache
+C:\Users\perin\source\repos\Stormhaven Weather Generator\Stormhaven Weather Generator\obj\Debug\net6.0\ref\Stormhaven Weather Generator.dll

@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v6.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v6.0": {
+      "Stormhaven Weather Generator/1.0.0": {
+        "runtime": {
+          "Stormhaven Weather Generator.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Stormhaven Weather Generator/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
