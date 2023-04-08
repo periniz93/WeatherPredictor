@@ -1,7 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 
 // Set the number of days to generate weather schedules for
-int numDays = 25;
+int numDays = 30;
 
 // Initialize the random number generator
 Schedule Schedule = new Schedule();
@@ -12,7 +12,7 @@ Schedule.Add(FirstDay);
 
 
 // Generate weather schedules for the specified number of days
-for (int day = 5; day <= numDays; day++)
+for (int day = 0; day <= numDays; day++)
     {
         DailyWeather DW = new DailyWeather(FirstDay);
         Schedule.Add(DW);

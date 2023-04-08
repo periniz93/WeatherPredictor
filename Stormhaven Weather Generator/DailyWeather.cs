@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using static DailyWeather;
 
 public class DailyWeather{
     /*Attributes*/
@@ -28,10 +29,6 @@ public class DailyWeather{
 
         }
     }
-    Dictionary<int, string> wind { get; set; }
-    Dictionary<int, string> water { get; set; }
-    Dictionary<int, string> wave { get; set; }
-    Dictionary<int, string> thunder { get; set; }
 
     /*The reason for this is to 
      * have a key-value entry
@@ -54,10 +51,6 @@ public class DailyWeather{
         weatherDict = new Dictionary<string, Weather>();
         addWeathersToDict();
 
-        water = new Dictionary<int, string>();
-        wind = new Dictionary<int, string>();   
-        wave = new Dictionary<int, string>();
-        thunder = new Dictionary<int, string>();
         firstDay();
         Console.WriteLine();
     }
@@ -80,12 +73,9 @@ public class DailyWeather{
         dayCount = Yesterday.dayCount + 1;
         weatherDict = new Dictionary<string, Weather>();
         addWeathersToDict();
-        water = new Dictionary<int, string>();
-        wind = new Dictionary<int, string>();
-        wave = new Dictionary<int, string>();
-        thunder = new Dictionary<int, string>();
-        checkWeather(yesterday);
         eventCount = yesterday.eventCount;
+        checkWeather(yesterday);
+        Console.WriteLine();
     }
 
     public void addWeathersToDict()
@@ -120,22 +110,32 @@ public class DailyWeather{
             case 0:
                 return 1;               
             case 1:
-                return 0.75;            
+                return 0.85;            
             case 2:
-                return 0.6;              
+                return 0.70;              
             case 3:
-                return 0.5;                
+                return 0.55;                
             case 4:
-                return 0.25;
+                return 0.40;
             default: return 1;
         }
     }
 
 
 
-    public void addToCount()
+    public void incrEventCount()
     {
+        if (this.eventCount < 4){
+            this.eventCount++;
+        }
+    }
 
+    public void decrEventCount()
+    {
+        if (this.eventCount > 0)
+        {
+            this.eventCount--;
+        }
     }
     public void checkWeather()
     {
@@ -143,32 +143,56 @@ public class DailyWeather{
 
     }
 
+    public bool rollForChange()
+    {
+        Random r = new Random();
+        double coinflip = r.Next(2); 
+        double roll = coinflip;
+        if (roll == 1)
+        {
+            return true;
+        }
+        return false;
+    }
+
     public void checkWeather(DailyWeather yesterday)
     {
-        //it doesn't have to return anything, it just has to add the weather to the weatherDict
-        // Since there's no yesterday, no weather has to be checked
-        double count = 0;
-
-        
         // Water 
         //(1) Check eventCount before water weather
         //(2) pass eventcount to BaseWeather:WaterWeather GetWeatherEvent()
         //(3) GetWeatherEvent() will return a dict<string, int> with the weather description and severity
         //(4) Add the weather description and severity to the WeatherDict Water key
-        
-        BaseWeather baseWeather = new WaterWeather();
-        Dictionary<int, string> weather = new Dictionary<int, string>();
-        count = countEvents();
-        weather = baseWeather.GetWeatherEvent(count);
-        this.weatherDict["water"].weatherEvent = weather.Last().Value;
-        this.weatherDict["water"].severity = weather.Last().Key;
-
-        if (this.weatherDict["water"].severity > 0)
+        if (rollForChange())
         {
-            if (!(checkYesterdayWater()))
-            { 
-                this.eventCount++;
+            BaseWeather baseWeather = new WaterWeather();
+            Dictionary<int, string> weather = new Dictionary<int, string>();
+            double multiplier = countEvents();
+            weather = baseWeather.GetWeatherEvent(multiplier);
+            this.weatherDict["water"].weatherEvent = weather.Last().Value;
+            this.weatherDict["water"].severity = weather.Last().Key;
+
+            if (this.weatherDict["water"].severity > 0)
+            {
+                if (!(checkYesterdayWater()))
+                {
+                    incrEventCount();
+                    Console.WriteLine("Incremented on Water Event");
+                }
             }
+            else
+            {
+                if ((checkYesterdayWater()))
+                {
+                    decrEventCount();
+                    Console.WriteLine("Decremented on Water Event");
+                }
+            }
+        }
+        else
+        {
+            Console.WriteLine("No Change in Water");
+            this.weatherDict["water"].weatherEvent = yesterday.weatherDict["water"].weatherEvent;
+            this.weatherDict["water"].severity = yesterday.weatherDict["water"].severity;
         }
         /*
         *Wind
@@ -177,19 +201,36 @@ public class DailyWeather{
         *(3) GetWeatherEvent() will return a dict<string, int> with the weather description and severity
         *(4) Add the weather description and severity to the WeatherDict Wind Key
         */
-        baseWeather = new WindWeather();
-        weather = new Dictionary<int, string>();
-        count = countEvents();
-        weather = baseWeather.GetWeatherEvent(count);
-        this.weatherDict["wind"].weatherEvent = weather.Last().Value;
-        this.weatherDict["wind"].severity = weather.Last().Key;
-
-        if (this.weatherDict["wind"].severity > 0)
+        if (rollForChange())
         {
-            if (!(checkYesterdayWind()))
+            BaseWeather baseWeather = new WindWeather();
+            Dictionary<int, string> weather = new Dictionary<int, string>();
+            double multiplier = countEvents();
+            weather = baseWeather.GetWeatherEvent(multiplier);
+            this.weatherDict["wind"].weatherEvent = weather.Last().Value;
+            this.weatherDict["wind"].severity = weather.Last().Key;
+
+            if (this.weatherDict["wind"].severity > 0)
             {
-                this.eventCount++;
+                if (!(checkYesterdayWind()))
+                {
+                    incrEventCount();
+                    Console.WriteLine("Incremented on Wind Event");
+                }
             }
+            else
+            {
+                if ((checkYesterdayWind()))
+                {
+                    decrEventCount();
+                    Console.WriteLine("Decremented on Wind Event");
+                }
+            }
+        }
+        else
+        {
+            this.weatherDict["wind"].weatherEvent = yesterday.weatherDict["wind"].weatherEvent;
+            this.weatherDict["wind"].severity = yesterday.weatherDict["wind"].severity;
         }
         /*
         *Thunder 
@@ -198,20 +239,37 @@ public class DailyWeather{
         *(3) GetWeatherEvent() will return a dict<string, int> with the weather description and severity
         *(4) add the weather description and severity to the WeatherDict Thunder Key
         */
-        baseWeather = new ThunderWeather();
-        weather = new Dictionary<int, string>();
-        count = countEvents();
-        weather= baseWeather.GetWeatherEvent(count);
-        this.weatherDict["thunder"].weatherEvent = weather.Last().Value;
-        this.weatherDict["thunder"].severity = weather.Last().Key;
-
-        if (this.weatherDict["thunder"].severity > 0)
+        if (rollForChange())
         {
-            if (!(checkYesterdayThunder()))
+            BaseWeather baseWeather = new ThunderWeather();
+            Dictionary<int, string> weather = new Dictionary<int, string>();
+            double multiplier = countEvents();
+            weather = baseWeather.GetWeatherEvent(multiplier);
+            this.weatherDict["thunder"].weatherEvent = weather.Last().Value;
+            this.weatherDict["thunder"].severity = weather.Last().Key;
+
+            if (this.weatherDict["thunder"].severity > 0)
             {
-                this.eventCount++;
+                if (!(checkYesterdayThunder()))
+                {
+                    incrEventCount();
+                    Console.WriteLine("Incremented on Thunder Event");
+                }
             }
-        }   
+            else
+            {
+                if ((checkYesterdayThunder()))
+                {
+                    decrEventCount();
+                    Console.WriteLine("Decremented on Thunder Event");
+                }
+            }
+        }
+        else
+        {
+            this.weatherDict["thunder"].weatherEvent = yesterday.weatherDict["thunder"].weatherEvent;
+            this.weatherDict["thunder"].severity = yesterday.weatherDict["thunder"].severity;
+        }
         /*
         *Waves
         *(1) Check eventCount before Wave weather
@@ -221,18 +279,37 @@ public class DailyWeather{
         *
         */
 
-        baseWeather = new WaveWeather();
-        weather = new Dictionary<int, string>();
-        count = countEvents();
-        weather = baseWeather.GetWeatherEvent(count);
-        this.weatherDict["wave"].weatherEvent = weather.Last().Value;
-        this.weatherDict["wave"].severity = weather.Last().Key; 
-        if (this.weatherDict["wave"].severity > 0)
+        if (rollForChange())
         {
-            if (!(checkYesterdayWave()))
+            BaseWeather baseWeather = new WaveWeather();
+            Dictionary<int, string> weather = new Dictionary<int, string>();
+            double multiplier = countEvents();
+            weather = baseWeather.GetWeatherEvent(multiplier);
+            this.weatherDict["wave"].weatherEvent = weather.Last().Value;
+            this.weatherDict["wave"].severity = weather.Last().Key;
+
+            if (this.weatherDict["wave"].severity > 0)
             {
-                this.eventCount++;
+                if (!(checkYesterdayWave()))
+                {
+                    incrEventCount();
+                    Console.WriteLine("Incremented on Wave Event");
+                }
             }
+            else
+            {
+                if ((checkYesterdayWave()))
+                {
+                    decrEventCount();
+                    Console.WriteLine("Decremented on Wave Event");
+                }
+            }
+        }
+        else
+        {
+            Console.WriteLine("No Change in Wave");
+            this.weatherDict["wave"].weatherEvent = yesterday.weatherDict["wave"].weatherEvent;
+            this.weatherDict["wave"].severity = yesterday.weatherDict["wave"].severity;
         }
 
         Console.WriteLine();
@@ -280,7 +357,7 @@ public class DailyWeather{
 
     public void printDailyWeather()
     {
-        Console.WriteLine("Schedule for Day " + dayCount);
+        Console.WriteLine("Schedule for Day " + dayCount + "| Event Count: " + this.eventCount);
         Console.WriteLine("______________________________");
         string printString = "";
 

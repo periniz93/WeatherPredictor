@@ -37,8 +37,7 @@ public abstract class BaseWeather
                     Console.WriteLine(WeatherEvents[index] + " added. Severity = " + index);
                     lastbeatenMax = Chances[index];
                 }
-                //Console.WriteLine("roll was " + roll);
-                
+                //Console.WriteLine("roll was " + roll);                
             }
             
         }
@@ -64,9 +63,9 @@ public class WaterWeather : BaseWeather
         {
             95, //sev 0 = 5%
             0, //sev 1 = 45%
-            35, //sev 2 = 30%   
-            65, //sev 3 = 20%
-            85  // sev 4 = 5%
+            20, //sev 2 = 30%   
+            50, //sev 3 = 20%
+            75  // sev 4 = 5%
         };
     }
 }
