@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Drawing;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 public class DailyWeather{
     /*Attributes*/
@@ -56,7 +58,8 @@ public class DailyWeather{
         wind = new Dictionary<int, string>();   
         wave = new Dictionary<int, string>();
         thunder = new Dictionary<int, string>();
-        checkWeather();
+        firstDay();
+        Console.WriteLine();
     }
 
     
@@ -94,6 +97,18 @@ public class DailyWeather{
         this.weatherDict.Add("wave", new Weather());         
     }
 
+    public void firstDay()
+    {
+        
+        //get the weaterdict dict value with water key 
+        foreach(KeyValuePair<string, Weather> item in this.weatherDict)
+        {
+            item.Value.severity = 0;
+            item.Value.weatherEvent = "None";
+        }
+
+    }
+
     public int countDailyChange()
     {
         return this.Yesterday.Count - this.Count;
@@ -122,15 +137,105 @@ public class DailyWeather{
     {
 
     }
-    public void checkWeather(DailyWeather yesterday)
+    public void checkWeather()
     {
         
 
     }
 
-    public void CheckWeather()
+    public void checkWeather(DailyWeather yesterday)
     {
+        //it doesn't have to return anything, it just has to add the weather to the weatherDict
+        // Since there's no yesterday, no weather has to be checked
+        double count = 0;
+
         
+        // Water 
+        //(1) Check eventCount before water weather
+        //(2) pass eventcount to BaseWeather:WaterWeather GetWeatherEvent()
+        //(3) GetWeatherEvent() will return a dict<string, int> with the weather description and severity
+        //(4) Add the weather description and severity to the WeatherDict Water key
+        
+        BaseWeather baseWeather = new WaterWeather();
+        Dictionary<int, string> weather = new Dictionary<int, string>();
+        count = countEvents();
+        weather = baseWeather.GetWeatherEvent(count);
+        this.weatherDict["water"].weatherEvent = weather.Last().Value;
+        this.weatherDict["water"].severity = weather.Last().Key;
+
+        if (this.weatherDict["water"].severity > 0)
+        {
+            if (!(checkYesterdayWater()))
+            { 
+                this.eventCount++;
+            }
+        }
+        /*
+        *Wind
+        *(1) Check eventCount before wind weather
+        *(2) pass eventcount to BaseWeather: WindWeather GetWeatherEvent()
+        *(3) GetWeatherEvent() will return a dict<string, int> with the weather description and severity
+        *(4) Add the weather description and severity to the WeatherDict Wind Key
+        */
+        baseWeather = new WindWeather();
+        weather = new Dictionary<int, string>();
+        count = countEvents();
+        weather = baseWeather.GetWeatherEvent(count);
+        this.weatherDict["wind"].weatherEvent = weather.Last().Value;
+        this.weatherDict["wind"].severity = weather.Last().Key;
+
+        if (this.weatherDict["wind"].severity > 0)
+        {
+            if (!(checkYesterdayWind()))
+            {
+                this.eventCount++;
+            }
+        }
+        /*
+        *Thunder 
+        *(1) Check eventCount before Thunder weather
+        *(2) pass eventcount to BaseWeather: ThunderWeather GetWeatherEvent()
+        *(3) GetWeatherEvent() will return a dict<string, int> with the weather description and severity
+        *(4) add the weather description and severity to the WeatherDict Thunder Key
+        */
+        baseWeather = new ThunderWeather();
+        weather = new Dictionary<int, string>();
+        count = countEvents();
+        weather= baseWeather.GetWeatherEvent(count);
+        this.weatherDict["thunder"].weatherEvent = weather.Last().Value;
+        this.weatherDict["thunder"].severity = weather.Last().Key;
+
+        if (this.weatherDict["thunder"].severity > 0)
+        {
+            if (!(checkYesterdayThunder()))
+            {
+                this.eventCount++;
+            }
+        }   
+        /*
+        *Waves
+        *(1) Check eventCount before Wave weather
+        *(2) pass eventcount to BaseWeather: ThunderWeather GetWeatherEvent()
+        *(3) GetWeatherEvent() will return a dict<string, int> with the weather description and severity
+        *(4) Add the weather description and severity to the WeatherDict Waves Key
+        *
+        */
+
+        baseWeather = new WaveWeather();
+        weather = new Dictionary<int, string>();
+        count = countEvents();
+        weather = baseWeather.GetWeatherEvent(count);
+        this.weatherDict["wave"].weatherEvent = weather.Last().Value;
+        this.weatherDict["wave"].severity = weather.Last().Key; 
+        if (this.weatherDict["wave"].severity > 0)
+        {
+            if (!(checkYesterdayWave()))
+            {
+                this.eventCount++;
+            }
+        }
+
+        Console.WriteLine();
     }
 
     public void weatherMultiplier(int count)
@@ -140,7 +245,7 @@ public class DailyWeather{
 
     public bool checkYesterdayWater()
     {
-        if (this.Yesterday.water?.Count == 0)
+        if (this.Yesterday.weatherDict["water"].severity == 0)
         {
             return false;
         }
@@ -149,7 +254,7 @@ public class DailyWeather{
 
     public bool checkYesterdayWind()
     {
-        if (this.Yesterday.wind?.Count == 0)
+        if (this.Yesterday.weatherDict["wind"].severity == 0)
         {
             return false;
         }
@@ -157,7 +262,7 @@ public class DailyWeather{
     }
     public bool checkYesterdayWave()
     {
-        if (this.Yesterday.wave?.Count == 0)
+        if (this.Yesterday.weatherDict["wave"].severity == 0)
         {
             return false;
         }
@@ -166,7 +271,7 @@ public class DailyWeather{
 
     public bool checkYesterdayThunder()
     {
-        if (this.Yesterday.thunder.Count == 0)
+        if (this.Yesterday.weatherDict["thunder"].severity == 0)
         {
             return false;
         }
@@ -178,21 +283,10 @@ public class DailyWeather{
         Console.WriteLine("Schedule for Day " + dayCount);
         Console.WriteLine("______________________________");
         string printString = "";
-        if (this.water.Count == 1) 
+
+        foreach(KeyValuePair<string, Weather> item in this.weatherDict)
         {
-            printString += this.water.Values.First() + " | ";
-        }
-        if (this.wind.Count == 1)
-        {
-            printString += this.wind.Values.First() + " | ";
-        }
-        if (this.thunder.Count == 1)
-        {
-            printString += this.thunder.Values.First() + " | ";
-        }
-        if (this.wave.Count == 1)
-        {
-            printString += this.wave.Values.First()+" | ";
+            printString += item.Value.weatherEvent + " | ";
         }
         Console.WriteLine(printString+ "\n");
 

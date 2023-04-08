@@ -1,25 +1,48 @@
-﻿using System;
+﻿using Microsoft.VisualBasic;
+using System;
 
 public abstract class BaseWeather
 {
     protected string[] WeatherEvents { get; set; }
     protected int[] Chances { get; set; }
-    protected static readonly Random Random = new Random();
+    protected static Random Random = new Random();
 
-    public Dictionary<int, string> GetWeatherEvent()
+    public Dictionary<int, string> GetWeatherEvent(double eventCount)
     {
         Dictionary<int, string> weather = new Dictionary<int, string>();
-        int roll = Random.Next(100) + 1;
+        // d100
+        double random = Random.Next(100);
+        double roll = random * eventCount + 1;
+        Console.WriteLine("roll was " + roll+"("+ random +" * " + eventCount + "+ 1)");
 
         int index = 0;
+        int lastbeatenMax = 0;
         for (index = 0; index < Chances.Length; index++)
         {
-            if (roll > Chances[index])
+            if (lastbeatenMax > 0 && Chances[index] >= lastbeatenMax)
             {
-                weather.Add(index + 1, WeatherEvents[index]);
-                return weather;
+                
+                    if (roll > Chances[index])
+                    {
+                        weather.Add(index, WeatherEvents[index]);
+                        Console.WriteLine(WeatherEvents[index] + " added. Severity = " + (index));
+                        lastbeatenMax = Chances[index];
+                    }          
             }
+            else //first run 
+            {
+                if (roll > Chances[index])
+                {
+                    weather.Add(index, WeatherEvents[index]);
+                    Console.WriteLine(WeatherEvents[index] + " added. Severity = " + index);
+                    lastbeatenMax = Chances[index];
+                }
+                //Console.WriteLine("roll was " + roll);
+                
+            }
+            
         }
+        
         return weather;
     }
 }
@@ -30,18 +53,20 @@ public class WaterWeather : BaseWeather
     {
         WeatherEvents = new string[]
         {
-            "Light Rain",
-            "Fog",
-            "Heavy Rain",
-            "Torrential downpour"
+            "None", //sev 0
+            "Fog", //sev 1
+            "Light Rain", //sev 2           
+            "Heavy Rain", //sev 3
+            "Torrential downpour" //sev 4
         };
 
         Chances = new int[]
         {
-            45,
-            30,
-            20,
-            5
+            95, //sev 0 = 5%
+            0, //sev 1 = 45%
+            35, //sev 2 = 30%   
+            65, //sev 3 = 20%
+            85  // sev 4 = 5%
         };
     }
 }
@@ -52,6 +77,7 @@ public class WaveWeather : BaseWeather
     {
         WeatherEvents = new string[]
         {
+            "None",
             "Surging Tides",
             "Rising Swells",
             "Rolling Breakers",
@@ -60,10 +86,11 @@ public class WaveWeather : BaseWeather
 
         Chances = new int[]
         {
-            49,
-            30,
-            20,
-            1
+            0,
+            50,
+            70,
+            85,
+            99
         };
     }
 }
@@ -74,20 +101,20 @@ public class ThunderWeather : BaseWeather
     {
         WeatherEvents = new string[]
         {
+            "None",
+            "Heat Lightning",
+            "Rumbling",
             "Lightning storm",
-            "Rumbling on the horizon",
             "Heavy lightning",
-            "Heat lightning",
-            "St.Elmo's Fire"
         };
 
         Chances = new int[]
         {
+            0,
+            10,
             40,
-            30,
-            25,
-            4,
-            1
+            80,
+            90
         };
     }
 }
@@ -98,18 +125,20 @@ public class WindWeather : BaseWeather
     {
         WeatherEvents = new string[]
         {
-            "Strong Gusts",
+            "None",
             "Gentle Breeze",
             "Sudden Squalls",
+            "Strong Gusts",
             "Imposing Tempest"
         };
 
         Chances = new int[]
         {
+            0,
+            15,
             40,
-            30,
-            25,
-            5
+            75,
+            90
         };
     }
 }

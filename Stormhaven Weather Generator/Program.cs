@@ -12,7 +12,7 @@ Schedule.Add(FirstDay);
 
 
 // Generate weather schedules for the specified number of days
-for (int day = 2; day <= numDays; day++)
+for (int day = 5; day <= numDays; day++)
     {
         DailyWeather DW = new DailyWeather(FirstDay);
         Schedule.Add(DW);
