@@ -171,6 +171,8 @@ public class DailyWeather{
             this.weatherDict["water"].weatherEvent = weather.Last().Value;
             this.weatherDict["water"].severity = weather.Last().Key;
 
+            
+
             if (this.weatherDict["water"].severity > 0)
             {
                 if (!(checkYesterdayWater()))

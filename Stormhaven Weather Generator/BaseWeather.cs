@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualBasic;
 using System;
+using static DailyWeather;
 
 public abstract class BaseWeather
 {
@@ -7,13 +8,13 @@ public abstract class BaseWeather
     protected int[] Chances { get; set; }
     protected static Random Random = new Random();
 
-    public Dictionary<int, string> GetWeatherEvent(double eventCount)
+    public Dictionary<int, string> GetWeatherEvent(double multiplier)
     {
         Dictionary<int, string> weather = new Dictionary<int, string>();
         // d100
         double random = Random.Next(100);
-        double roll = random * eventCount + 1;
-        Console.WriteLine("roll was " + roll+"("+ random +" * " + eventCount + "+ 1)");
+        double roll = random * multiplier + 1;
+        Console.WriteLine("roll was " + roll + "(" + random + " * " + multiplier + "+ 1)");
 
         int index = 0;
         int lastbeatenMax = 0;
@@ -21,13 +22,13 @@ public abstract class BaseWeather
         {
             if (lastbeatenMax > 0 && Chances[index] >= lastbeatenMax)
             {
-                
-                    if (roll > Chances[index])
-                    {
-                        weather.Add(index, WeatherEvents[index]);
-                        Console.WriteLine(WeatherEvents[index] + " added. Severity = " + (index));
-                        lastbeatenMax = Chances[index];
-                    }          
+
+                if (roll > Chances[index])
+                {
+                    weather.Add(index, WeatherEvents[index]);
+                    Console.WriteLine(WeatherEvents[index] + " added. Severity = " + (index));
+                    lastbeatenMax = Chances[index];
+                }
             }
             else //first run 
             {
@@ -39,10 +40,60 @@ public abstract class BaseWeather
                 }
                 //Console.WriteLine("roll was " + roll);                
             }
-            
+
         }
-        
+
         return weather;
+    }
+
+    public Dictionary<int, string> GetWeatherEvent2(double multiplier, int ydaySeverity)
+    {
+        Dictionary<int, string> weather = new Dictionary<int, string>();
+        // d100
+        double num = Chances[ydaySeverity];
+        double random = (num - 50) + (Random.NextDouble() * ((num + 50) - (num - 50)));
+        if (random < 0)
+        {
+            random = 0;
+        }
+
+        if (random > 100)
+        {
+            random = 100;
+        }
+
+        double roll = random * multiplier;
+        Console.WriteLine("roll was " + roll + "(" + random + " * " + multiplier + "+ 1)");
+
+        int index = 0;
+        int lastbeatenMax = 0;
+        for (index = 0; index < Chances.Length; index++)
+        {
+            if (lastbeatenMax > 0 && Chances[index] >= lastbeatenMax)
+            {
+
+                if (roll > Chances[index])
+                {
+                    weather.Add(index, WeatherEvents[index]);
+                    Console.WriteLine(WeatherEvents[index] + " added. Severity = " + (index));
+                    lastbeatenMax = Chances[index];
+                }
+            }
+            else //first run 
+            {
+                if (roll > Chances[index])
+                {
+                    weather.Add(index, WeatherEvents[index]);
+                    Console.WriteLine(WeatherEvents[index] + " added. Severity = " + index);
+                    lastbeatenMax = Chances[index];
+                }
+                //Console.WriteLine("roll was " + roll);                
+            }
+
+        }
+
+        return weather;
+       
     }
 }
 
