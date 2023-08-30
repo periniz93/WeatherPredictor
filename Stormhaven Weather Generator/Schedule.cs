@@ -1,18 +1,23 @@
 ﻿using System.Collections.Generic;
 using System;
 
-public class Schedule : List<DailyWeather> 
+namespace WeatherProj
 {
-
-    public Schedule()
+    public class Schedule : List<DailyWeather>
     {
 
-    }
-    public void printSchedule()
-    { 
-        foreach (DailyWeather weather in this)
+        public Schedule()
         {
-            weather.printDailyWeather();
+
         }
+        public void printSchedule()
+        {
+            foreach (DailyWeather weather in this)
+            {
+                weather.printDailyWeather();
+            }
+        }
+
+
     }
 }
