@@ -18,7 +18,6 @@ C:\Users\perin\Documents\WeatherPredictor\Stormhaven Weather Generator\bin\Debug
 C:\Users\perin\Documents\WeatherPredictor\Stormhaven Weather Generator\bin\Debug\net6.0\Stormhaven Weather Generator.runtimeconfig.json
 C:\Users\perin\Documents\WeatherPredictor\Stormhaven Weather Generator\bin\Debug\net6.0\Stormhaven Weather Generator.dll
 C:\Users\perin\Documents\WeatherPredictor\Stormhaven Weather Generator\bin\Debug\net6.0\Stormhaven Weather Generator.pdb
-C:\Users\perin\Documents\WeatherPredictor\Stormhaven Weather Generator\obj\Debug\net6.0\Stormhaven Weather Generator.csproj.AssemblyReference.cache
 C:\Users\perin\Documents\WeatherPredictor\Stormhaven Weather Generator\obj\Debug\net6.0\Stormhaven Weather Generator.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\perin\Documents\WeatherPredictor\Stormhaven Weather Generator\obj\Debug\net6.0\Stormhaven Weather Generator.AssemblyInfoInputs.cache
 C:\Users\perin\Documents\WeatherPredictor\Stormhaven Weather Generator\obj\Debug\net6.0\Stormhaven Weather Generator.AssemblyInfo.cs
